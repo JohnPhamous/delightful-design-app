@@ -30,7 +30,7 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
   >(messages, (state, newMessage) => [newMessage, ...state]);
 
   const slowPost = async (formData: FormData) => {
-    if (config === 6) {
+    if (config >= 6) {
       const payload = {
         text: formData.get("text")!.toString() || "",
         createdAt: new Date(),
@@ -108,6 +108,14 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
           display: "flex",
           flexDirection: "column",
         },
+        "7": {
+          height: "100dvh",
+          overflow: "hidden",
+          padding: "16px 0",
+          paddingBottom: 0,
+          display: "flex",
+          flexDirection: "column",
+        },
       })}
       transition={TRANSITION_PROPERTIES}
     >
@@ -148,6 +156,12 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
             borderBottom: "1px solid #2E2E2E",
             paddingBottom: "16px",
           },
+          "7": {
+            display: "flex",
+            justifyContent: "center",
+            borderBottom: "1px solid #2E2E2E",
+            paddingBottom: "16px",
+          },
         })}
       >
         <div>
@@ -174,10 +188,13 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
             "6": {
               flexGrow: 1,
             },
+            "7": {
+              flexGrow: 1,
+            },
           })}
           transition={TRANSITION_PROPERTIES}
         >
-          {config === 6 && (
+          {config >= 7 && (
             <Post
               message={{
                 id: 9,
@@ -192,7 +209,7 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
                     >
                       Send me a message on Twitter
                     </a>{" "}
-                    if you have questions.
+                    if you have questions or talk shop.
                     <br />
                     <br />
                     <div>Now let&apos;s go get lunch!! 🌮</div>
@@ -246,6 +263,12 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
             background: "#0A0A0A",
             position: "relative",
           },
+          "7": {
+            padding: "16px 12px",
+            borderTop: "1px solid #2E2E2E",
+            background: "#0A0A0A",
+            position: "relative",
+          },
         })}
         transition={TRANSITION_PROPERTIES}
       >
@@ -289,6 +312,16 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
               border: "1px solid #2E2E2E",
               width: "100%",
             },
+            "7": {
+              padding: "8px 12px",
+              paddingRight: "64px",
+              backgroundColor: "#0A0A0A",
+              fontSize: 16,
+              color: "white",
+              borderRadius: "6px",
+              border: "1px solid #2E2E2E",
+              width: "100%",
+            },
           })}
         />
         <AnimatePresence mode="popLayout">
@@ -320,6 +353,17 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
                   lineHeight: "normal",
                 },
                 "6": {
+                  position: "absolute",
+                  right: 20,
+                  top: 24,
+                  backgroundColor: "#19C37B",
+                  color: "black",
+                  borderRadius: "4px",
+                  padding: "4px 8px",
+                  fontSize: 14,
+                  lineHeight: "normal",
+                },
+                "7": {
                   position: "absolute",
                   right: 20,
                   top: 24,

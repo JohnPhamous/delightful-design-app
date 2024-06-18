@@ -50,6 +50,12 @@ export function Post({ message, config }: PostProps): JSX.Element {
           gap: "8px",
           borderBottom: "1px solid #2E2E2E",
         },
+        "7": {
+          display: "flex",
+          padding: "12px 12px",
+          gap: "8px",
+          borderBottom: "1px solid #2E2E2E",
+        },
       })}
       transition={TRANSITION_PROPERTIES}
       className={clsx(
@@ -102,6 +108,14 @@ export function Post({ message, config }: PostProps): JSX.Element {
             justifyContent: "center",
             marginTop: 2,
           },
+          "7": {
+            height: "40px",
+            width: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 2,
+          },
         })}
         colors={config < 4 ? RAW_COLORS : A11Y_COLORS}
       />
@@ -134,6 +148,11 @@ export function Post({ message, config }: PostProps): JSX.Element {
             flexDirection: "column",
             width: "100%",
           },
+          "7": {
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          },
         })}
         transition={TRANSITION_PROPERTIES}
       >
@@ -162,6 +181,11 @@ export function Post({ message, config }: PostProps): JSX.Element {
               justifyContent: "space-between",
               width: "100%",
             },
+            "7": {
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            },
           })}
         >
           <motion.h4
@@ -180,6 +204,9 @@ export function Post({ message, config }: PostProps): JSX.Element {
                 fontWeight: 500,
               },
               "6": {
+                fontWeight: 500,
+              },
+              "7": {
                 fontWeight: 500,
               },
             })}
@@ -207,6 +234,9 @@ export function Post({ message, config }: PostProps): JSX.Element {
                 "6": {
                   color: "#A1A1A1",
                 },
+                "7": {
+                  color: "#A1A1A1",
+                },
               })}
             >
               {config < 4 && "Posted "}
@@ -232,6 +262,7 @@ export function Post({ message, config }: PostProps): JSX.Element {
             "4": { lineHeight: "20px", marginRight: "32px" },
             "5": { lineHeight: "20px", marginRight: "32px" },
             "6": { lineHeight: "20px", marginRight: "32px" },
+            "7": { lineHeight: "20px", marginRight: "32px" },
           })}
         >
           {message.richText || message.text}

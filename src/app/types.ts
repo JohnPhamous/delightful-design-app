@@ -3,7 +3,7 @@ export interface Config {
   state: States;
 }
 
-export type States = 1 | 2 | 3 | 4 | 5 | 6;
+export type States = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export interface Message {
   id: number;
