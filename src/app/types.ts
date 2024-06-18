@@ -8,6 +8,7 @@ export type States = 1 | 2 | 3 | 4 | 5 | 6;
 export interface Message {
   id: number;
   text: string;
+  richText?: React.ReactNode;
   createdAt: Date;
   createdBy: string;
 }

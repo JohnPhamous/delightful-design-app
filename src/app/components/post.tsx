@@ -6,6 +6,8 @@ import { clsx } from "clsx";
 import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
 import { motion } from "framer-motion";
 import React, { CSSProperties } from "react";
+import JohnPhamousAvatar from "./johnphamous.jpeg";
+import Image from "next/image";
 
 interface PostProps {
   message: Message;
@@ -58,8 +60,16 @@ export function Post({ message, config }: PostProps): JSX.Element {
       <Avatar
         name={message.createdBy}
         style={getStyles(config, {
-          "1": {},
-          "2": {},
+          "1": {
+            display: "block",
+            height: 18,
+            width: 18,
+          },
+          "2": {
+            display: "block",
+            height: 18,
+            width: 18,
+          },
           "3": {
             height: "40px",
             width: "40px",
@@ -224,7 +234,7 @@ export function Post({ message, config }: PostProps): JSX.Element {
             "6": { lineHeight: "20px", marginRight: "32px" },
           })}
         >
-          {message.text}
+          {message.richText || message.text}
         </motion.p>
       </motion.div>
     </motion.li>
@@ -264,7 +274,7 @@ const Avatar = ({
     <motion.span
       transition={TRANSITION_PROPERTIES}
       layout="position"
-      className="rounded-full h-fit"
+      className="rounded-full h-fit overflow-hidden"
       aria-hidden
       style={{
         ...style,
@@ -272,7 +282,11 @@ const Avatar = ({
         flexShrink: 0,
       }}
     >
-      {initials}
+      {name === "johnphamous" ? (
+        <Image src={JohnPhamousAvatar} alt="" />
+      ) : (
+        <>{initials}</>
+      )}
     </motion.span>
   );
 };

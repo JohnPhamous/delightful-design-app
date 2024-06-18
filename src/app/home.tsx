@@ -177,9 +177,47 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
           })}
           transition={TRANSITION_PROPERTIES}
         >
+          {config === 6 && (
+            <Post
+              message={{
+                id: 9,
+                text: "Thanks for listening to my talk!",
+                richText: (
+                  <>
+                    Thanks for listening to my talk!{" "}
+                    <a
+                      href="https://x.com/johnphamous"
+                      target="_blank"
+                      className="text-[#006EFE] hover:underline"
+                    >
+                      Send me a message on Twitter
+                    </a>{" "}
+                    if you have questions.
+                    <br />
+                    <br />
+                    <div>Now let&apos;s go get lunch!! 🌮</div>
+                  </>
+                ),
+                createdAt: new Date(),
+                createdBy: "johnphamous",
+              }}
+              config={config}
+            />
+          )}
           {optimisticMessages.map((message) => {
             return <Post message={message} key={message.id} config={config} />;
           })}
+          <Post
+            message={{
+              id: 0,
+              text: "👋 first!!!!",
+              createdAt: new Date(
+                "Tue Jun 18 2024 11:42:37 GMT-0700 (Pacific Daylight Time)"
+              ),
+              createdBy: "johnphamous",
+            }}
+            config={config}
+          />
         </motion.ul>
       </>
 
