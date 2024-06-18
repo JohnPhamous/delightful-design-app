@@ -3,17 +3,24 @@ import { Message } from "@/app/types";
 import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
 import Filter from "bad-words";
+import { generateRandomAnimalName } from "@/utils";
 
-export const submitPostAction = async (formData: FormData) => {
-  const text = formData.get("text")!.toString() || "";
-
+export const submitPostAction = async ({
+  createdAt,
+  createdBy,
+  text,
+}: {
+  text: string;
+  createdAt?: Date;
+  createdBy?: string;
+}) => {
   const filter = new Filter();
   const sanitizedText = filter.clean(text);
 
   const payload: Omit<Message, "id"> = {
     text: sanitizedText,
-    createdAt: new Date(),
-    createdBy: generateRandomAnimalName(),
+    createdAt: createdAt || new Date(),
+    createdBy: createdBy || generateRandomAnimalName(),
   };
 
   // @ts-expect-error
@@ -21,50 +28,3 @@ export const submitPostAction = async (formData: FormData) => {
 
   revalidatePath("/");
 };
-
-function getRandomElement<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function generateRandomAnimalName(): string {
-  const adjectives = [
-    "Swift",
-    "Cunning",
-    "Brave",
-    "Fierce",
-    "Gentle",
-    "Mighty",
-    "Silent",
-    "Playful",
-    "Loyal",
-    "Noble",
-  ];
-
-  const animals = [
-    "Lion",
-    "Tiger",
-    "Bear",
-    "Wolf",
-    "Eagle",
-    "Falcon",
-    "Shark",
-    "Panther",
-    "Elephant",
-    "Leopard",
-    "Fox",
-    "Rabbit",
-    "Hawk",
-    "Owl",
-    "Dolphin",
-    "Whale",
-    "Giraffe",
-    "Zebra",
-    "Buffalo",
-    "Cheetah",
-  ];
-
-  const adjective = getRandomElement(adjectives);
-  const animal = getRandomElement(animals);
-
-  return `${adjective} ${animal}`;
-}

@@ -3,10 +3,17 @@
 import { submitPostAction } from "@/actions";
 import { Logo } from "@/app/components/logo";
 import { Post } from "@/app/components/post";
-import { Config, Message, States } from "@/app/types";
-import { getStyles, TRANSITION_PROPERTIES } from "@/utils";
+import { Config, Message } from "@/app/types";
+import {
+  generateRandomAnimalName,
+  getStyles,
+  TRANSITION_PROPERTIES,
+} from "@/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import { useOptimistic } from "react";
+import { nanoid } from "nanoid";
+import styles from "./home.module.css";
 
 interface HomeProps {
   messages: Message[];
@@ -17,12 +24,33 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
 
+  const [optimisticMessages, addOptimisticMessage] = useOptimistic<
+    Message[],
+    Message
+  >(messages, (state, newMessage) => [newMessage, ...state]);
+
   const slowPost = async (formData: FormData) => {
+    if (config === 6) {
+      const payload = {
+        text: formData.get("text")!.toString() || "",
+        createdAt: new Date(),
+        createdBy: generateRandomAnimalName(),
+        id: nanoid(),
+      };
+
+      // @ts-expect-error
+      addOptimisticMessage(payload);
+      submitPostAction(payload);
+      setValue("");
+      return;
+    }
     if (loading) return;
     setLoading(true);
 
     setTimeout(() => {
-      submitPostAction(formData);
+      submitPostAction({
+        text: formData.get("text")!.toString() || "",
+      });
       setLoading(false);
       setValue("");
     }, 2000);
@@ -72,6 +100,14 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
           display: "flex",
           flexDirection: "column",
         },
+        "6": {
+          height: "100dvh",
+          overflow: "hidden",
+          padding: "16px 0",
+          paddingBottom: 0,
+          display: "flex",
+          flexDirection: "column",
+        },
       })}
       transition={TRANSITION_PROPERTIES}
     >
@@ -106,6 +142,12 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
             borderBottom: "1px solid #2E2E2E",
             paddingBottom: "16px",
           },
+          "6": {
+            display: "flex",
+            justifyContent: "center",
+            borderBottom: "1px solid #2E2E2E",
+            paddingBottom: "16px",
+          },
         })}
       >
         <div>
@@ -129,10 +171,13 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
             "5": {
               flexGrow: 1,
             },
+            "6": {
+              flexGrow: 1,
+            },
           })}
           transition={TRANSITION_PROPERTIES}
         >
-          {messages.map((message) => {
+          {optimisticMessages.map((message) => {
             return <Post message={message} key={message.id} config={config} />;
           })}
         </motion.ul>
@@ -157,10 +202,17 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
             background: "#0A0A0A",
             position: "relative",
           },
+          "6": {
+            padding: "16px 12px",
+            borderTop: "1px solid #2E2E2E",
+            background: "#0A0A0A",
+            position: "relative",
+          },
         })}
         transition={TRANSITION_PROPERTIES}
       >
         <motion.input
+          aria-label="New post"
           name="text"
           id="text"
           placeholder="I'm thinking of..."
@@ -180,6 +232,16 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
             "3": {},
             "4": {},
             "5": {
+              padding: "8px 12px",
+              paddingRight: "64px",
+              backgroundColor: "#0A0A0A",
+              fontSize: 16,
+              color: "white",
+              borderRadius: "6px",
+              border: "1px solid #2E2E2E",
+              width: "100%",
+            },
+            "6": {
               padding: "8px 12px",
               paddingRight: "64px",
               backgroundColor: "#0A0A0A",
@@ -219,9 +281,39 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
                   fontSize: 14,
                   lineHeight: "normal",
                 },
+                "6": {
+                  position: "absolute",
+                  right: 20,
+                  top: 24,
+                  backgroundColor: "#19C37B",
+                  color: "black",
+                  borderRadius: "4px",
+                  padding: "4px 8px",
+                  fontSize: 14,
+                  lineHeight: "normal",
+                },
               })}
             >
-              {loading ? "Posting..." : config < 5 ? "Create New Post" : "Post"}
+              {loading ? (
+                <span className="flex gap-1 items-center">
+                  Posting...
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+                      className={styles.spinner}
+                    />
+                  </svg>
+                </span>
+              ) : config < 5 ? (
+                "Create New Post"
+              ) : (
+                "Post"
+              )}
             </motion.button>
           )}
         </AnimatePresence>
