@@ -6,7 +6,7 @@ import { Post } from "@/app/components/post";
 import { Config, Message, States } from "@/app/types";
 import { getStyles, TRANSITION_PROPERTIES } from "@/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface HomeProps {
   messages: Message[];
@@ -27,6 +27,14 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
       setValue("");
     }, 2000);
   };
+
+  useEffect(() => {
+    if (config === 1) {
+      document.documentElement.style.overflow = "revert";
+    } else {
+      document.documentElement.style.overflow = "hidden";
+    }
+  }, [config]);
 
   return (
     <motion.main
@@ -183,9 +191,10 @@ export function Home({ config, messages }: HomeProps): JSX.Element {
             },
           })}
         />
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {(value.length > 0 || config < 5) && (
             <motion.button
+              layoutId="submit-button"
               type="submit"
               disabled={loading}
               className="focus-visible:outline outline-blue-400 outline-2 outline-offset-2 before:content-[''] relative before:absolute before:inset-[-8px] hover:!bg-green-600"

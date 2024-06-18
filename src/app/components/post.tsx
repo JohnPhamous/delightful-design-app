@@ -44,7 +44,10 @@ export function Post({ message, config }: PostProps): JSX.Element {
         },
       })}
       transition={TRANSITION_PROPERTIES}
-      className="transition-colors duration-1000"
+      className={clsx(
+        "transition-colors duration-1000",
+        config >= 3 && "last-of-type:!border-b-transparent"
+      )}
     >
       <Avatar
         name={message.createdBy}
@@ -146,35 +149,38 @@ export function Post({ message, config }: PostProps): JSX.Element {
           >
             {message.createdBy}
           </motion.h4>
-          <motion.time
-            dateTime={message.createdAt.toISOString()}
-            layout="position"
-            transition={TRANSITION_PROPERTIES}
-            style={getStyles(config, {
-              "1": {},
-              "2": {},
-              "3": {
-                color: "#A1A1A1",
-              },
-              "4": {
-                color: "#A1A1A1",
-              },
-              "5": {
-                color: "#A1A1A1",
-              },
-            })}
-          >
-            {config < 4 && "Posted "}
-            {config < 4
-              ? formatDistanceToNow(message.createdAt, {
-                  addSuffix: false,
-                })
-              : shortenRelativeDate(
-                  formatDistanceToNowStrict(message.createdAt, {
+          <span>
+            <span className="sr-only">Posted at</span>
+            <motion.time
+              dateTime={message.createdAt.toISOString()}
+              layout="position"
+              transition={TRANSITION_PROPERTIES}
+              style={getStyles(config, {
+                "1": {},
+                "2": {},
+                "3": {
+                  color: "#A1A1A1",
+                },
+                "4": {
+                  color: "#A1A1A1",
+                },
+                "5": {
+                  color: "#A1A1A1",
+                },
+              })}
+            >
+              {config < 4 && "Posted "}
+              {config < 4
+                ? formatDistanceToNow(message.createdAt, {
                     addSuffix: false,
                   })
-                )}
-          </motion.time>
+                : shortenRelativeDate(
+                    formatDistanceToNowStrict(message.createdAt, {
+                      addSuffix: false,
+                    })
+                  )}
+            </motion.time>
+          </span>
         </motion.div>
         <motion.p
           layout="position"
